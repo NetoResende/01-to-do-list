@@ -10,13 +10,24 @@ export function Home(){
             <TasckInput 
                 type="text" 
                 id="tesck" 
-                placeholder="Dê um nome para o seu projeto"/>
+                placeholder="Dê um nome para o seu projeto"
+                list="task-suggestion"/>
+                
+                <datalist id="task-suggestion">
+                  <option value="projeto-1"/>
+                  <option value="projeto-3"/>
+                  <option value="projeto-4"/>
+                  <option value="qualquer"/>
+                </datalist>
 
             <label htmlFor="minutesAmount">durante</label>
             <MinutesAmountInput 
                 type="number"
                 id="minutesAmount"
-                 placeholder="00"/>
+                 placeholder="00"
+                 step={5}
+                 min={5}
+                 max={60}/>
 
             <span>minutos</span>
        </FormContainer>

@@ -45,11 +45,12 @@ const BaseInputs= styled.input `
     color: ${props=>props.theme["gray-500"]};
   }
 `;
-
 export const TasckInput = styled(BaseInputs) `
   flex:1;
+  &::-webkit-calendar-picker-indicator { // pra tirá a flechinha de indicação:
+    display: none !important;
+  }
 `;
-
 export const MinutesAmountInput = styled(BaseInputs) `
   width: 4rem;
 `;
