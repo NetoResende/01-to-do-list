@@ -15,12 +15,13 @@ const newCiclesFormValidateSchema = zod.object({
 })
 
 export function Home(){
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch , reset} = useForm({
     resolver: zodResolver(newCiclesFormValidateSchema),
   });
 
   function handlerCreateNewCicle(data: any){
     console.log(data);
+    reset();
   }
   const task = watch("task");
   const IsSubmiteDisabled = !task;
