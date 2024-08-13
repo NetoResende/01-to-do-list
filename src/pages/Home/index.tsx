@@ -13,13 +13,14 @@ const newCiclesFormValidateSchema = zod.object({
     min(5, 'O ciclo precisa ser no mínimo 5 minutos').
     max(60, 'O ciclo precisa ser de no máximo de 60 minutos')
 })
+  type newCiclesFormatteData = zod.infer < typeof newCiclesFormValidateSchema >
 
 export function Home(){
-  const { register, handleSubmit, watch , reset} = useForm({
+  const { register, handleSubmit, watch,formState , reset} = useForm <newCiclesFormatteData>({
     resolver: zodResolver(newCiclesFormValidateSchema),
   });
 
-  function handlerCreateNewCicle(data: any){
+  function handlerCreateNewCicle(data: newCiclesFormatteData){
     console.log(data);
     reset();
   }
@@ -27,7 +28,7 @@ export function Home(){
   const IsSubmiteDisabled = !task;
 
   // formState  usado para passar a mensagem de validação de errors...
-  // console.log(formState.errors);
+  console.log(formState.errors);
   
     return (
     <HomeContainer>
