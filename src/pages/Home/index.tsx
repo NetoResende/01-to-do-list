@@ -4,7 +4,7 @@ import { useForm} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod';
 import { useEffect, useState } from "react";
-import { differenceInSeconds } from 'date-fns'
+import { differenceInSeconds} from 'date-fns'
 
 
 const newCiclesFormValidateSchema = zod.object({
@@ -37,12 +37,18 @@ export function Home(){
   const activeCycle = cycles.find(cycle => cycle.id === activeCyclesId);
 
   useEffect(()=>{
+    let interval: number;
+
     if(activeCycle){
-      setInterval(()=>{
+      interval = setInterval(()=>{
         setAmountSecondsPassed(
           differenceInSeconds(new Date, activeCycle.startDate)
         )
       }, 1000)
+    }
+
+    return ()=>{
+        clearInterval(interval)
     }
   },[activeCycle])
 
@@ -56,6 +62,7 @@ export function Home(){
     }
     setCycles((state) => [...state, newCycle])
     setActiveCyclesId(id)
+    setAmountSecondsPassed(0)
     reset();
   }
  
@@ -66,6 +73,12 @@ export function Home(){
   const secondsAmount = currentSeconds % 60
   const minutes = String(minutesAmount).padStart(2, '0')
   const seconds = String(secondsAmount).padStart(2, '0')
+
+  useEffect(()=>{
+      if(activeCycle){
+          document.title=`${minutes} : ${seconds}`
+      }
+  },[minutes, seconds, activeCycle])
   
   const task = watch("task");
   const IsSubmiteDisabled = !task;
