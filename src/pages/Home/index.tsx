@@ -3,7 +3,8 @@ import { CountDownContainer, FormContainer, HomeContainer, MinutesAmountInput, S
 import { useForm} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { differenceInSeconds } from 'date-fns'
 
 
 const newCiclesFormValidateSchema = zod.object({
@@ -13,35 +14,51 @@ const newCiclesFormValidateSchema = zod.object({
   minutesAmounts: 
     zod.number().
     min(5, 'O ciclo precisa ser no mínimo 5 minutos').
-    max(60, 'O ciclo precisa ser de no máximo de 60 minutos')
+    max(60, 'O ciclo precisa ser de no máximo de 60 minutos'), 
 })
   type newCiclesFormatteData = zod.infer < typeof newCiclesFormValidateSchema >
 
 interface Cycle {
   id: string;
   task: string;
-  minutesAmounts: number
+  minutesAmounts: number;
+  startDate: Date
 }
+
 export function Home(){
   const [ cycles, setCycles ] = useState <Cycle[]>([]);
   const [ activeCyclesId, setActiveCyclesId ] = useState <string | null>(null);
   const [ amountSecondsPassed, setAmountSecondsPassed ] = useState(0)
- 
-  const { register, handleSubmit, watch,formState , reset} = useForm <newCiclesFormatteData>({
+
+  const { register, handleSubmit, watch, formState , reset} = useForm <newCiclesFormatteData>({
     resolver: zodResolver(newCiclesFormValidateSchema),
   });
+
+  const activeCycle = cycles.find(cycle => cycle.id === activeCyclesId);
+
+  useEffect(()=>{
+    if(activeCycle){
+      setInterval(()=>{
+        setAmountSecondsPassed(
+          differenceInSeconds(new Date, activeCycle.startDate)
+        )
+      }, 1000)
+    }
+  },[activeCycle])
+
   function handlerCreateNewCicle(data: newCiclesFormatteData){
     const id = String( new Date().getTime())
     const newCycle: Cycle = {
       id,
       task: data.task,
-      minutesAmounts: data.minutesAmounts
+      minutesAmounts: data.minutesAmounts,
+      startDate: new Date(),
     }
     setCycles((state) => [...state, newCycle])
     setActiveCyclesId(id)
     reset();
   }
-  const activeCycle = cycles.find(cycle => cycle.id === activeCyclesId)
+ 
 
   const totalSeconds = activeCycle ? activeCycle.minutesAmounts * 60 : 0
   const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
