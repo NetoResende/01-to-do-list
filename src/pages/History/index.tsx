@@ -1,78 +1,59 @@
-
+import { useContext } from "react";
 import { HistoryContainer, HistoryList, Status } from "./styles";
+import { CycleContext } from "../../contexts/CyclesContext";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale/pt-BR";
 
-export function History(){
+export function History() {
+  const { cycles } = useContext(CycleContext);
+
   return (
     <HistoryContainer>
-         <h1>Meu Histórico</h1>
-         <HistoryList>
-            <table>
-              <thead>
-                <th>Tarefa</th>
-                <th>Duração</th>
-                <th>Início</th>
-                <th>Concluído</th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Tarefa</td>
-                  <td>20 minutos</td>
-                  <td>Há 2 meses</td>
+      <h1>Meu Histórico</h1>
+      {/* 
+        * mostrar as informações em tela usando
+        * <pre>
+            {JSON.stringify(cycles, null, 2)}
+          </pre>
+      */}
+      
+      <HistoryList>
+        <table>
+          <thead>
+            <th>Tarefa</th>
+            <th>Duração</th>
+            <th>Início</th>
+            <th>Concluído</th>
+          </thead>
+          <tbody>
+            {cycles.map((cycle) => {
+              return (
+                <tr key={cycle.id}>
+                  <td>{cycle.task}</td>
+                  <td>{cycle.minutesAmounts} minutos</td>
+                  <td>{formatDistanceToNow(cycle.startDate, {
+                    addSuffix: true,
+                    locale: ptBR
+                  })}</td>
                   <td>
-                    <Status statusColor="green">concluído</Status>
+                    {cycle.fishedDate && (
+                      <Status statusColor="green">concluído</Status>
+                    )}
+
+                    {cycle.interruptDate && (
+                      <Status statusColor="red">interrompido</Status>
+                    )}
+
+                    {!cycle.fishedDate && !cycle.interruptDate && (
+                      <Status statusColor="yellow">em andamento</Status>
+                    )}
                   </td>
                 </tr>
-                <tr>
-                  <td>Tarefa</td>
-                  <td>20 minutos</td>
-                  <td>Há 2 meses</td>
-                  <td>
-                    <Status statusColor="green">concluído</Status>
-                 </td>
-                </tr>
-                <tr>
-                  <td>Tarefa</td>
-                  <td>20 minutos</td>
-                  <td>Há 2 meses</td>
-                  <td>
-                    <Status statusColor="green">concluído</Status>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Tarefa</td>
-                  <td>20 minutos</td>
-                  <td>Há 2 meses</td>
-                  <td>
-                    <Status statusColor="green">concluído</Status>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Tarefa</td>
-                  <td>20 minutos</td>
-                  <td>Há 2 meses</td>
-                  <td>
-                    <Status statusColor="green">concluído</Status>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Tarefa</td>
-                  <td>20 minutos</td>
-                  <td>Há 2 meses</td>
-                  <td>
-                    <Status statusColor="yellow">em andamento</Status>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Tarefa</td>
-                  <td>20 minutos</td>
-                  <td>Há 2 meses</td>
-                  <td>
-                    <Status statusColor="red">interrompido</Status>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-         </HistoryList>
+              );
+            })}
+          </tbody>
+        </table>
+      </HistoryList>
     </HistoryContainer>
-  )
+  );
 }
