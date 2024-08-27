@@ -12,9 +12,9 @@ export function History() {
       <h1>Meu Histórico</h1>
       {/* 
         * mostrar as informações em tela usando
-        * <pre>
+        * <prev>
             {JSON.stringify(cycles, null, 2)}
-          </pre>
+          </prev>
       */}
       
       <HistoryList>
@@ -31,19 +31,18 @@ export function History() {
                 <tr key={cycle.id}>
                   <td>{cycle.task}</td>
                   <td>{cycle.minutesAmounts} minutos</td>
-                  <td>{formatDistanceToNow(cycle.startDate, {
-                    addSuffix: true,
-                    locale: ptBR
-                  })}</td>
+                  <td>{formatDistanceToNow(new Date(cycle.startDate), {
+                        addSuffix: true,
+                        locale: ptBR
+                      })}
+                  </td>
                   <td>
                     {cycle.fishedDate && (
                       <Status statusColor="green">concluído</Status>
                     )}
-
                     {cycle.interruptDate && (
                       <Status statusColor="red">interrompido</Status>
                     )}
-
                     {!cycle.fishedDate && !cycle.interruptDate && (
                       <Status statusColor="yellow">em andamento</Status>
                     )}

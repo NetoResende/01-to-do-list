@@ -7,7 +7,6 @@ interface CreateCycleDate {
   task: string;
   minutesAmounts: number;
 }
-
 interface CycleContextType {
   cycles: Cycle[];
   activeCycle: Cycle | undefined;
@@ -20,7 +19,6 @@ interface CycleContextType {
 }
 
 export const CycleContext = createContext({} as CycleContextType);
-
 interface CyclesContextProviderProps {
   children: ReactNode;
 }
@@ -40,7 +38,6 @@ export function CyclesContextProvider({ children,}: CyclesContextProviderProps) 
       }
       return initialState
     }
-    
   );
 
   const { cycles, activeCyclesId } = cyclesState;
@@ -58,7 +55,6 @@ export function CyclesContextProvider({ children,}: CyclesContextProviderProps) 
   useEffect(()=>{
     const stateJSON = JSON.stringify(cyclesState)
     localStorage.setItem('@ignite-timer:cycles-state-1.0.0', stateJSON)
-    
   },[cyclesState])
 
   function setSecondsPassed(seconds: number) {

@@ -74,5 +74,4 @@ export const Status = styled.span <StatusProps>`
     border-radius: 9999px;
     background: ${props => props.theme[STATUS_COLOS[props.statusColor]]}
   }
-
-`;
+`
